@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<p id="data"></p>
+	<script>
+		const connectWS = () => {
+			const socket = new WebSocket("ws://localhost:3333");
+			socket.addEventListener("open", (event) => {
+				socket.send("now");
+			});
+			socket.addEventListener("message", (event) => {
+				const data = JSON.parse(event.data);
+				document.querySelector("#data").innerHTML = JSON.stringify(data.item.name);
+			});
+
+			setInterval(() => {
+				socket.send("now");
+			}, 2000);
+		};
+
+		window.onload = () => {
+			connectWS();
+		}
+	</script>
+</body>
+</html>
